@@ -1,0 +1,6 @@
+c:\users\daniel\documents\visual studio 2013\Projects\RoutePlanner\RoutePlannerConsole\bin\Debug\RoutePlannerConsole.exe.config
+c:\users\daniel\documents\visual studio 2013\Projects\RoutePlanner\RoutePlannerConsole\bin\Debug\RoutePlannerConsole.exe
+c:\users\daniel\documents\visual studio 2013\Projects\RoutePlanner\RoutePlannerConsole\bin\Debug\RoutePlannerConsole.pdb
+c:\users\daniel\documents\visual studio 2013\Projects\RoutePlanner\RoutePlannerConsole\obj\Debug\RoutePlannerConsole.exe
+c:\users\daniel\documents\visual studio 2013\Projects\RoutePlanner\RoutePlannerConsole\obj\Debug\RoutePlannerConsole.pdb
+c:\users\daniel\documents\visual studio 2013\Projects\RoutePlanner\RoutePlannerConsole\obj\Debug\RoutePlannerConsoleApp.csprojResolveAssemblyReference.cache
