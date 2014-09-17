@@ -3,3 +3,5 @@ obj/
 [Dd]ebug*/
 [Bb]in
 *.csproj.user
+*.suo
+*.cache
