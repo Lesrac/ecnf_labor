@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerConsole
+﻿namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerConsole
 {
+    using System;
+    using System.Reflection;
+
     class RoutePlannerConsoleApp
     {
         static void Main(string[] args)
