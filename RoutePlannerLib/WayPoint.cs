@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
+﻿namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 {
     public class WayPoint
     {
@@ -16,7 +10,6 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
         {
             Name = _name;
             Latitude = _latitude;
-            Longitude = _longitude;
         }
     }
 }

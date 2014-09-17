@@ -1,0 +1,7 @@
+obj/
+[Rr]elease*/
+[Dd]ebug*/
+[Bb]in
+*.csproj.user
+*.suo
+*.cache

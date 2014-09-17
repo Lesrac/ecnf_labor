@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoutePlannerConsoleApp", "RoutePlannerConsole\RoutePlannerConsoleApp.csproj", "{60332D9E-7C87-4E87-8F28-2898BE6B5965}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoutePlannerConsole", "RoutePlannerConsole\RoutePlannerConsole.csproj", "{60332D9E-7C87-4E87-8F28-2898BE6B5965}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoutePlannerLib", "RoutePlannerLib\RoutePlannerLib.csproj", "{259BD5BC-C34D-4F11-857B-56509E6FA0E5}"
 EndProject
