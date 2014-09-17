@@ -1,1 +1,0 @@
-c:\users\daniel\documents\visual studio 2013\Projects\RoutePlanner\RoutePlannerConsole\bin\Debug\RoutePlannerConsole.exe.config
