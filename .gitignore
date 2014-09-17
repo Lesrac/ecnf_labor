@@ -2,3 +2,4 @@ obj/
 [Rr]elease*/
 [Dd]ebug*/
 [Bb]in
+*.csproj.user
