@@ -16,6 +16,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
         {
             Name = _name;
             Latitude = _latitude;
+            Longitude = _longitude;
         }
     }
 }
