@@ -18,6 +18,12 @@
             WayPoint wpTripolis = new WayPoint("Tripolis", 59.86062519999999, 17.650885199999948);
             Console.WriteLine("Distanz Bern-Tripolis: {0}km", wpBern.Distance(wpTripolis));
 
+            City cBern = new City("Bern", "Schweiz", 75000, 47.479319847061966, 8.212966918945312);
+
+            Cities cities = new Cities();
+            string filename = "citiesTestDataLab2.txt";
+            Console.WriteLine("{0} Cities", cities.ReadCities(filename));
+
             Console.ReadKey();
         }
     }

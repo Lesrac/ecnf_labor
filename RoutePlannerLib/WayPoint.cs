@@ -35,5 +35,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             double distance = radius * Math.Acos(sinStart * sinTarget + cosStart * cosTarget * cosDifference);
             return distance;
         }
+
+
     }
 }
