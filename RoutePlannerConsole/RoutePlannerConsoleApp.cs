@@ -20,9 +20,13 @@
 
             City cBern = new City("Bern", "Schweiz", 75000, 47.479319847061966, 8.212966918945312);
 
-            Cities cities = new Cities();
-            string filename = "citiesTestDataLab2.txt";
-            Console.WriteLine("{0} Cities", cities.ReadCities(filename));
+            City c0 = new City("Mumbai", "India", 12383146, 18.96, 72.82);
+
+            WayPoint wp = c0.Location;
+            Cities c = new Cities();
+            c.ReadCities("citiesTestDataLab2.txt");
+            c.FindNeighbours(wp,2000);
+            c.ReadCities("citiesTestDataLab2.txt");
 
             Console.ReadKey();
         }

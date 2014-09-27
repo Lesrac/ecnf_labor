@@ -23,7 +23,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             {
                 string[] splitted = line.Split('\t');
                 City city = new City(splitted[0], splitted[1], Convert.ToInt32(splitted[2].Trim()), Convert.ToDouble(splitted[3].Trim(), info), Convert.ToDouble(splitted[4].Trim(), info));
-                CityList.Add(city);
+                this[CityList.Count] = city;
             }
             return CityList.Count;
         }
@@ -33,7 +33,9 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             List<City> neighbours = new List<City>();
             foreach (City city in CityList)
             {
-                if (location.Distance(city.Location) <= distance)
+                double dist = location.Distance(city.Location);
+                Console.WriteLine("Distance: {0}", dist);
+                if (dist <= distance)
                 {
                     neighbours.Add(city);
                 }
@@ -55,9 +57,18 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             {
                 if (index >= 0 && index < CityList.Count)
                 {
+                    Console.WriteLine("If");
                     CityList[index] = value;
                     Count++;
                 }
+                else if (index == CityList.Count)
+                {
+                    Console.WriteLine("else");
+                    CityList.Add(value);
+                    CityList[index] = value;
+                    Count++;
+                }
+                Console.WriteLine("Index: {0}, Count: {1}", index, Count);
             }
         }
     }
