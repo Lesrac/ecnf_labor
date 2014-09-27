@@ -1,4 +1,5 @@
-﻿namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
+﻿using System;
+namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 {
     public class WayPoint
     {
@@ -10,6 +11,34 @@
         {
             Name = _name;
             Latitude = _latitude;
+            Longitude = _longitude;
         }
+
+        public override string ToString()
+        {
+            string val = String.Format("WayPoint: {0}/{1}", String.Format("{0:0.00}", Latitude), String.Format("{0:0.00}", Longitude));
+            if (!String.IsNullOrWhiteSpace(Name))
+            {
+                val = String.Format("WayPoint: {0} {1}/{2}", Name, String.Format("{0:0.00}", Latitude), String.Format("{0:0.00}", Longitude));
+            }
+            return val;
+        }
+
+        public double Distance(WayPoint target)
+        {
+            Console.WriteLine("Target Lo: {0}, La:{1}", target.Longitude, target.Latitude); 
+            Console.WriteLine("Lo: {0}, La:{1}", Longitude, Latitude);
+            int radius = 6371;
+            double sinStart = Math.Sin(Latitude);
+            double sinTarget = Math.Sin(target.Latitude);
+            double cosStart = Math.Cos(Latitude);
+            double cosTarget = Math.Cos(target.Latitude);
+            double cosDifference = Math.Cos(Longitude - target.Longitude);
+            double distance = radius * Math.Acos(sinStart * sinTarget + cosStart * cosTarget * cosDifference);
+            Console.WriteLine(distance);
+            return distance;
+        }
+
+
     }
 }
