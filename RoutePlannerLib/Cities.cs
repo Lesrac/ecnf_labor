@@ -57,18 +57,15 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             {
                 if (index >= 0 && index < CityList.Count)
                 {
-                    Console.WriteLine("If");
                     CityList[index] = value;
                     Count++;
                 }
                 else if (index == CityList.Count)
                 {
-                    Console.WriteLine("else");
                     CityList.Add(value);
                     CityList[index] = value;
                     Count++;
                 }
-                Console.WriteLine("Index: {0}, Count: {1}", index, Count);
             }
         }
     }

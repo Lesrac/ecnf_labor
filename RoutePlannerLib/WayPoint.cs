@@ -26,16 +26,13 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 
         public double Distance(WayPoint target)
         {
-            Console.WriteLine("Target Lo: {0}, La:{1}", target.Longitude, target.Latitude); 
-            Console.WriteLine("Lo: {0}, La:{1}", Longitude, Latitude);
             int radius = 6371;
-            double sinStart = Math.Sin(Latitude);
-            double sinTarget = Math.Sin(target.Latitude);
-            double cosStart = Math.Cos(Latitude);
-            double cosTarget = Math.Cos(target.Latitude);
-            double cosDifference = Math.Cos(Longitude - target.Longitude);
+            double sinStart = Math.Sin(Latitude * (Math.PI / 180));
+            double sinTarget = Math.Sin(target.Latitude * (Math.PI / 180));
+            double cosStart = Math.Cos(Latitude * (Math.PI / 180));
+            double cosTarget = Math.Cos(target.Latitude * (Math.PI / 180));
+            double cosDifference = Math.Cos(Longitude * (Math.PI / 180) - target.Longitude * (Math.PI / 180));
             double distance = radius * Math.Acos(sinStart * sinTarget + cosStart * cosTarget * cosDifference);
-            Console.WriteLine(distance);
             return distance;
         }
 
