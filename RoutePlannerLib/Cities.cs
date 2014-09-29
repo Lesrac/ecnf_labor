@@ -30,6 +30,12 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 
         public List<City> FindNeighbours(WayPoint location, double distance)
         {
+            /*var query = from city in CityList
+                        where location.Distance(city.Location) <= distance
+                        orderby location.Distance(city.Location)
+                        select city;
+            return new List<City>(query);
+            */
             List<City> neighbours = new List<City>();
             foreach (City city in CityList)
             {
@@ -40,7 +46,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
                     neighbours.Add(city);
                 }
             }
-            return neighbours;
+            return (neighbours.OrderBy( city => location.Distance(city.Location))).ToList();
         }
 
         public City this[int index]
