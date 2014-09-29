@@ -17,13 +17,15 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
         {
             CityList = new List<City>();
             CultureInfo info = CultureInfo.GetCultureInfo("en-GB");
-            TextReader reader = File.OpenText(filename);
-            string line;
-            while ((line = reader.ReadLine()) != null)
+            using (TextReader reader = File.OpenText(filename))
             {
-                string[] splitted = line.Split('\t');
-                City city = new City(splitted[0], splitted[1], Convert.ToInt32(splitted[2].Trim()), Convert.ToDouble(splitted[3].Trim(), info), Convert.ToDouble(splitted[4].Trim(), info));
-                this[CityList.Count] = city;
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    string[] splitted = line.Split('\t');
+                    City city = new City(splitted[0], splitted[1], Convert.ToInt32(splitted[2].Trim()), Convert.ToDouble(splitted[3].Trim(), info), Convert.ToDouble(splitted[4].Trim(), info));
+                    this[CityList.Count] = city;
+                }
             }
             return CityList.Count;
         }
