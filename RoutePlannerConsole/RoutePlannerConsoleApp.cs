@@ -28,6 +28,8 @@
             c.FindNeighbours(wp,2000);
             c.ReadCities("citiesTestDataLab2.txt");
 
+            Console.WriteLine("City found: {0}", c.FindCity("Mumbai").Name);
+
             Console.ReadKey();
         }
     }
