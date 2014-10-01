@@ -17,27 +17,19 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
         {
             CityList = new List<City>();
             CultureInfo info = CultureInfo.GetCultureInfo("en-GB");
-            using (TextReader reader = File.OpenText(filename))
+            TextReader reader = File.OpenText(filename);
+            string line;
+            while ((line = reader.ReadLine()) != null)
             {
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    string[] splitted = line.Split('\t');
-                    City city = new City(splitted[0], splitted[1], Convert.ToInt32(splitted[2].Trim()), Convert.ToDouble(splitted[3].Trim(), info), Convert.ToDouble(splitted[4].Trim(), info));
-                    this[CityList.Count] = city;
-                }
+                string[] splitted = line.Split('\t');
+                City city = new City(splitted[0], splitted[1], Convert.ToInt32(splitted[2].Trim()), Convert.ToDouble(splitted[3].Trim(), info), Convert.ToDouble(splitted[4].Trim(), info));
+                this[CityList.Count] = city;
             }
             return CityList.Count;
         }
 
         public List<City> FindNeighbours(WayPoint location, double distance)
         {
-            /*var query = from city in CityList
-                        where location.Distance(city.Location) <= distance
-                        orderby location.Distance(city.Location)
-                        select city;
-            return new List<City>(query);
-            */
             List<City> neighbours = new List<City>();
             foreach (City city in CityList)
             {
@@ -48,7 +40,11 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
                     neighbours.Add(city);
                 }
             }
+<<<<<<< Updated upstream
+return (neighbours.OrderBy( city => location.Distance(city.Location))).ToList();
+=======
             return (neighbours.OrderBy(city => location.Distance(city.Location))).ToList();
+>>>>>>> Stashed changes
         }
 
         public City FindCity(string cityName)

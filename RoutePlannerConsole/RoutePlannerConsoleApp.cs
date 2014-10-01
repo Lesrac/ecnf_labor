@@ -28,6 +28,15 @@
             c.FindNeighbours(wp,2000);
             c.ReadCities("citiesTestDataLab2.txt");
 
+            var routes = new Routes(c);
+            var reqWatch = new RouteRequestWatcher();
+            routes.RouteRequestEvent += reqWatch.LogRouteRequests;
+            routes.FindShortestRouteBetween("Mumbai", "India", TransportModes.Rail);
+            routes.FindShortestRouteBetween("Mumbai", "India", TransportModes.Rail);
+            routes.FindShortestRouteBetween("India", "Mumbai", TransportModes.Rail);
+
+            Console.WriteLine("City found: {0}", c.FindCity("Mumbai").Name);
+
             Console.ReadKey();
         }
     }
