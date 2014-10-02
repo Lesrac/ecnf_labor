@@ -31,7 +31,13 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             } else {
                 requests.Add(args.ToCity.Name, 1);
             }
-            Console.WriteLine("ToCity: {0} has been requested {1} times", toCity, requests[toCity]);
+
+            Console.WriteLine("Current Request state");
+            Console.WriteLine("---------------------");
+            foreach(string cityName in requests.Keys) {
+                Console.WriteLine("ToCity: {0} has been requested {1} times", cityName, GetCityRequests(cityName));
+            }
+            Console.WriteLine();
         }
     }
 }
