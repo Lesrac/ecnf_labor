@@ -55,7 +55,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
         {
             return CityList.Find(delegate(City c)
             {
-                return c.Name.Equals(cityName, StringComparison.CurrentCultureIgnoreCase);
+                return string.Compare(c.Name, cityName, true) == 0;
             });
         }
 
