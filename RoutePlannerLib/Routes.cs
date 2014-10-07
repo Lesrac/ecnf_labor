@@ -63,6 +63,18 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 
         }
 
+        private List<City> FindCitiesBetween(string fromCity, string toCity)
+        {
+            // TODO 
+            return null;
+        }
+
+        private List<Link> FindPath(List<City> cities, TransportModes mode)
+        {
+            // TODO 
+            return null;
+        }
+
         #region Lab04: Dijkstra implementation
         public List<Link> FindShortestRouteBetween(string fromCity, string toCity, TransportModes mode)
         {
@@ -70,12 +82,10 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             if (citiesBetween == null || citiesBetween.Count < 1 || routes == null || routes.Count < 1)
                 return null;
 
-            City cityFrom = cities.FindCity(fromCity);
-            City cityTo = cities.FindCity(toCity);
-            RouteRequestEvent(this, new RouteRequestEventArgs(cityFrom, cityTo, mode));
-
             var source = citiesBetween[0];
             var target = citiesBetween[citiesBetween.Count - 1];
+
+            RouteRequestEvent(this, new RouteRequestEventArgs(source, target, mode));
 
             Dictionary<City, double> dist;
             Dictionary<City, City> previous;
@@ -97,7 +107,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             var q = new List<City>(); // the set of all nodes (cities) in Graph ;
             dist = new Dictionary<City, double>();
             previous = new Dictionary<City, City>();
-            foreach (var v in cities)
+            foreach(var v in cities)
             {
                 dist[v] = double.MaxValue;
                 previous[v] = null;
@@ -105,6 +115,11 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             }
 
             return q;
+        }
+
+        private Link FindLink(City from, City to, TransportModes mode)
+        {
+            return null;
         }
 
         /// <summary>
@@ -166,7 +181,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
         private List<City> FindNeighbours(City city, TransportModes mode)
         {
             var neighbors = new List<City>();
-            foreach (var r in routes)
+            foreach(var r in routes)
                 if (mode.Equals(r.TransportMode))
                 {
                     if (city.Equals(r.FromCity))
@@ -192,7 +207,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             citiesOnRoute.Reverse();
             return citiesOnRoute;
         }
-        #endregion
+		#endregion
 
     }
 }
