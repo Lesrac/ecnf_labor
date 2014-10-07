@@ -85,7 +85,6 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             var citiesBetween = FindCitiesBetween(fromCity, toCity);
             if (citiesBetween == null || citiesBetween.Count < 1 || routes == null || routes.Count < 1)
             {
-                Console.WriteLine("Stupido {0},{1},{2},{3}", citiesBetween == null, citiesBetween.Count < 1, routes == null, routes.Count < 1);
                 return null;
             }
 
