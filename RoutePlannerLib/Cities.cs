@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using Fhnw.Ecnf.RoutePlanner.RoutePlannerLib.Util;
 
 namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 {
@@ -13,22 +14,23 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
     {
         public List<City> CityList { get; set; }
         public int Count { get; set; }
+
         public int ReadCities(string filename)
         {
             CityList = new List<City>();
             CultureInfo info = CultureInfo.GetCultureInfo("en-GB");
-            using (TextReader reader = File.OpenText(filename))
+            using (TextReader reader = new StreamReader(filename))
             {
-                string line;
-                while ((line = reader.ReadLine()) != null)
+                IEnumerable<string[]> citiesAsStrings = reader.GetSplittedLines('\t');
+                foreach (string[] cs in citiesAsStrings)
                 {
-                    string[] splitted = line.Split('\t');
-                    City city = new City(splitted[0], splitted[1], Convert.ToInt32(splitted[2].Trim()), Convert.ToDouble(splitted[3].Trim(), info), Convert.ToDouble(splitted[4].Trim(), info));
+                    City city = new City(cs[0].Trim(), cs[1].Trim(), int.Parse(cs[2]), Convert.ToDouble(cs[3].Trim(), info), Convert.ToDouble(cs[4].Trim(), info));
                     this[CityList.Count] = city;
                 }
             }
             return CityList.Count;
         }
+
 
         public List<City> FindNeighbours(WayPoint location, double distance)
         {

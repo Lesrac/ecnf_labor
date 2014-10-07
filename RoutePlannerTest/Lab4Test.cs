@@ -56,6 +56,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerTest
         [TestMethod]
         public void TestTask4FindRoutes()
         {
+            var reqWatch = new RouteRequestWatcher();
             var cities = new Cities();
             cities.ReadCities(CitiesTestFile);
             var expectedLinks = new List<Link>();
@@ -68,6 +69,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerTest
 
             var routes = new Routes(cities);
             routes.ReadRoutes(LinksTestFile);
+            routes.RouteRequestEvent += reqWatch.LogRouteRequests;
 
             Assert.AreEqual(11, cities.Count);
 
