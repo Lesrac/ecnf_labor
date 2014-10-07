@@ -36,6 +36,14 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             return distance;
         }
 
+        public static WayPoint operator +(WayPoint lhs, WayPoint rhs)
+        {
+            return new WayPoint(lhs.Name, lhs.Latitude + rhs.Latitude, lhs.Longitude + rhs.Longitude);
+        }
 
+        public static WayPoint operator -(WayPoint lhs, WayPoint rhs)
+        {
+            return new WayPoint(lhs.Name, lhs.Latitude - rhs.Latitude, lhs.Longitude - rhs.Longitude);
+        }
     }
 }
