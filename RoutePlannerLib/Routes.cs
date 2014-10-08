@@ -68,13 +68,11 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 
         private List<Link> FindPath(List<City> cities, TransportModes mode)
         {
-            // TODO 
-            City startCity = cities[0];
             List<Link> links = new List<Link>();
-            for (int i = 1; i < cities.Count; i++)
+            for (int i = 0; i < cities.Count-1; i++)
             {
                 double distance = 0.0;
-                links.Add(new Link(startCity, cities[i], distance));
+                links.Add(new Link(cities[i], cities[i+1], distance));
             }
             return links;
         }
@@ -90,8 +88,6 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 
             var source = citiesBetween[0];
             var target = citiesBetween[citiesBetween.Count - 1];
-            Console.WriteLine("Source: {0} {1}", source.Name, source.Country);
-            Console.WriteLine("Target: {0}, {1}", target.Name, target.Country);
             if (RouteRequestEvent != null)
             {
                 RouteRequestEvent(this, new RouteRequestEventArgs(source, target, mode));
@@ -127,7 +123,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 
         private Link FindLink(City from, City to, TransportModes mode)
         {
-            return null;
+            return new Link(from, to, from.Location.Distance(to.Location));
         }
 
         /// <summary>

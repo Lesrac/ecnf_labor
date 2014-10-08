@@ -45,7 +45,7 @@
             List<Link> l = r.FindShortestRouteBetween("Zürich", "Winterthur", TransportModes.Rail);
             foreach (Link link in l)
             {
-                Console.WriteLine(link);
+                Console.WriteLine("from {0} to {1} in {2}", link.FromCity.Name, link.ToCity.Name, link.Distance);
             }
             Console.ReadKey();
         }
