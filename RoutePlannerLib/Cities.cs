@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using Fhnw.Ecnf.RoutePlanner.RoutePlannerLib.Util;
-
-namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
+﻿namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Xml;
+    using Fhnw.Ecnf.RoutePlanner.RoutePlannerLib.Util;
+
     public class Cities
     {
         public List<City> CityList { get; set; }
