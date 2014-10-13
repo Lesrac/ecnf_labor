@@ -3,6 +3,7 @@
     using System;
     using System.Reflection;
     using Fhnw.Ecnf.RoutePlanner.RoutePlannerLib;
+    using System.Collections.Generic;
 
     class RoutePlannerConsoleApp
     {
@@ -37,6 +38,15 @@
 
             Console.WriteLine("City found: {0}", c.FindCity("Mumbai").Name);
 
+            c.ReadCities("citiesTestDataLab4.txt");
+            Routes r = new Routes(c);
+            r.RouteRequestEvent += reqWatch.LogRouteRequests;
+            r.ReadRoutes("linksTestDataLab4.txt");
+            List<Link> l = r.FindShortestRouteBetween("Zürich", "Winterthur", TransportModes.Rail);
+            foreach (Link link in l)
+            {
+                Console.WriteLine("from {0} to {1} in {2}", link.FromCity.Name, link.ToCity.Name, link.Distance);
+            }
             Console.ReadKey();
         }
     }

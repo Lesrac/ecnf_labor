@@ -46,6 +46,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteRequestEventArgs.cs" />
     <Compile Include="Routes.cs" />
+    <Compile Include="TextReaderExtension.cs" />
     <Compile Include="WayPoint.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

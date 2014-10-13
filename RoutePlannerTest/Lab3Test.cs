@@ -106,7 +106,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerTest
             cities.ReadCities(CitiesTestFile);
 
             var routes = new Routes(cities);
-
+            routes.ReadRoutes(LinksTestFile);
             routes.RouteRequestEvent += reqWatch.LogRouteRequests;
 
             routes.FindShortestRouteBetween("Bern", "Zürich", TransportModes.Rail);
