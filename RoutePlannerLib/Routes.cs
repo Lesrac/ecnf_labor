@@ -68,13 +68,23 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 
         private List<Link> FindPath(List<City> cities, TransportModes mode)
         {
-            List<Link> links = new List<Link>();
-            for (int i = 0; i < cities.Count-1; i++)
+            List<Link> resultPath = new List<Link>();
+
+            City fromCity = null;
+            foreach (City toCity in cities)
             {
-                double distance = 0.0;
-                links.Add(new Link(cities[i], cities[i+1], distance));
+                if (fromCity != null)
+                {
+                    Link l = FindLink(fromCity, toCity, mode);
+                    if (l != null)
+                    {
+                        resultPath.Add(l);
+                    }
+                }
+                fromCity = toCity;
             }
-            return links;
+
+            return resultPath;
         }
 
         #region Lab04: Dijkstra implementation
@@ -121,9 +131,14 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             return q;
         }
 
-        private Link FindLink(City from, City to, TransportModes mode)
+        private Link FindLink(City fromC, City toC, TransportModes mode)
         {
-            return new Link(from, to, from.Location.Distance(to.Location));
+
+            return (from l in this.routes
+                    where mode.Equals(l.TransportMode)
+                    && ((fromC.Equals(l.FromCity) && toC.Equals(l.ToCity))
+                         || (toC.Equals(l.FromCity) && fromC.Equals(l.ToCity)))
+                    select new Link(fromC, toC, l.Distance, TransportModes.Rail)).FirstOrDefault();
         }
 
         /// <summary>
