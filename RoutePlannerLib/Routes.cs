@@ -1,13 +1,14 @@
 
-using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Threading;
-using System.Linq;
-using Fhnw.Ecnf.RoutePlanner.RoutePlannerLib;
-
 namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 {
+    using System;
+    using System.IO;
+    using System.Collections.Generic;
+    using System.Threading;
+    using System.Linq;
+    using Fhnw.Ecnf.RoutePlanner.RoutePlannerLib;
+    using Fhnw.Ecnf.RoutePlanner.RoutePlannerLib.Util;
+
     public delegate void RouteRequestHandler(object sender, RouteRequestEventArgs e);
     /// <summary>
     /// Manages a routes from a city to another city.
@@ -42,10 +43,8 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
         {
             using (TextReader reader = new StreamReader(filename))
             {
-                string line;
-                while ((line = reader.ReadLine()) != null)
+                foreach(string[] linkAsString in reader.GetSplittedLines('\t'))
                 {
-                    var linkAsString = line.Split('\t');
                     City city1 = cities.FindCity(linkAsString[0]);
                     City city2 = cities.FindCity(linkAsString[1]);
                     // only add links, where the cities are found 
