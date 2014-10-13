@@ -21,7 +21,6 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             Location = new WayPoint(_name, _latitude, _longitude);
         }
 
-        public bool Equals(City obj)
         public override int GetHashCode()
         {
             int result = 0;
@@ -32,10 +31,36 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 
             return result;
         }
+
+        public override bool Equals(object obj)
+        {
+            // if obj is null or not an instance of city
+            // then c will be null
+            City c = obj as City;
+            return Equals(c);
+        }
+
+        public bool Equals(City other)
+        {
+            // If parameter is null return false:
+            if (other == null)
             {
                 return false;
             }
-            return this.Name.Equals(obj.Name) && this.Country.Equals(obj.Country);
+
+            return IsEqualName(other) && IsEqualCountry(other);
+        }
+
+        private bool IsEqualName(City other)
+        {
+            return (this.Name == null && other.Name == null)
+                || (this.Name != null && this.Name.Equals(other.Name));
+        }
+
+        private Boolean IsEqualCountry(City other)
+        {
+            return (this.Country == null && other.Country == null)
+                || (this.Country != null && this.Country.Equals(other.Country));
         }
 
     }
