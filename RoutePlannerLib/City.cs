@@ -22,8 +22,16 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
         }
 
         public bool Equals(City obj)
+        public override int GetHashCode()
         {
-            if (obj == null)
+            int result = 0;
+            result += (Name == null ? 0 : Name.GetHashCode()) * 13;
+            result += (Country == null ? 0 : Country.GetHashCode()) * 17;
+            result += Population * 19;
+            result += (Location == null ? 0 : Location.GetHashCode()) * 19;
+
+            return result;
+        }
             {
                 return false;
             }
