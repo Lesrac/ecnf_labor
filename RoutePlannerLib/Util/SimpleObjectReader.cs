@@ -332,7 +332,9 @@
 
             public object Build()
             {
-                return root;
+                object result = root;
+                root = null;
+                return result;
             }
         }
 
