@@ -60,6 +60,19 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 
         }
 
+        public City[] FindCities(TransportModes transportMode)
+        {
+            var fromCities = routes
+                    .Where(l => l.TransportMode.Equals(transportMode))
+                    .Select(m => m.FromCity);
+
+            var toCitties = routes
+                    .Where(l => l.TransportMode.Equals(transportMode))
+                    .Select(m => m.ToCity);
+
+            return fromCities.Union(toCitties).ToArray<City>();
+        }
+
         private List<City> FindCitiesBetween(string fromCity, string toCity)
         {
             return cities.FindCitiesBetween(cities.FindCity(fromCity), cities.FindCity(toCity));
