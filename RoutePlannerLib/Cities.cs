@@ -34,23 +34,10 @@
 
         public List<City> FindNeighbours(WayPoint location, double distance)
         {
-            /*var query = from city in CityList
-                        where location.Distance(city.Location) <= distance
-                        orderby location.Distance(city.Location)
-                        select city;
-            return new List<City>(query);
-            */
-            List<City> neighbours = new List<City>();
-            foreach (City city in CityList)
-            {
-                double dist = location.Distance(city.Location);
-                Console.WriteLine("Distance: {0}", dist);
-                if (dist <= distance)
-                {
-                    neighbours.Add(city);
-                }
-            }
-            return (neighbours.OrderBy(city => location.Distance(city.Location))).ToList();
+            return CityList
+                .Where(c => location.Distance(c.Location) <= distance)
+                .OrderBy(c => location.Distance(c.Location))
+                .ToList();
         }
 
         public City FindCity(string cityName)
