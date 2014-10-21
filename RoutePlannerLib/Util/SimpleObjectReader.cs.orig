@@ -6,6 +6,13 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+<<<<<<< HEAD
+    public class SimpleObjectReader
+    {
+        public SimpleObjectReader(TextReader reader)
+        {
+
+=======
     using System.Text.RegularExpressions;
     using System.Reflection;
    
@@ -19,10 +26,16 @@
         {
             this.reader = reader;
             builder = new ObjectBuilder();
+>>>>>>> master
         }
 
         public object Next()
         {
+<<<<<<< HEAD
+            return null;
+        }
+
+=======
             ILineHandler rootHandler = CreateLineHandler();
             while (!builder.CanBuild)
             {
@@ -339,5 +352,6 @@
         }
 
         
+>>>>>>> master
     }
 }

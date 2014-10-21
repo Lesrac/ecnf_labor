@@ -4,6 +4,8 @@
     using System.Reflection;
     using Fhnw.Ecnf.RoutePlanner.RoutePlannerLib;
     using System.Collections.Generic;
+    using Fhnw.Ecnf.RoutePlanner.RoutePlannerLib.Util;
+    using System.IO;
 
     class RoutePlannerConsoleApp
     {
@@ -20,8 +22,22 @@
             Console.WriteLine("Distanz Bern-Tripolis: {0}km", wpBern.Distance(wpTripolis));
 
             City cBern = new City("Bern", "Schweiz", 75000, 47.479319847061966, 8.212966918945312);
-
             City c0 = new City("Mumbai", "India", 12383146, 18.96, 72.82);
+
+            string serializedCity = string.Empty;
+            using (StringWriter outstream = new StringWriter())
+            {
+                SimpleObjectWriter writer = new SimpleObjectWriter(outstream);
+                writer.Next(cBern);
+                serializedCity = outstream.ToString();
+            }
+            Console.WriteLine(serializedCity);
+
+            using(StringReader inStream = new StringReader(serializedCity)) {
+                SimpleObjectReader reader = new SimpleObjectReader(inStream);
+                object o = reader.Next();
+            }
+        
 
             WayPoint wp = c0.Location;
             Cities c = new Cities();

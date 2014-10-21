@@ -2,68 +2,67 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
-    using System.Reflection;
-    using System.Runtime.InteropServices;
     using System.Text;
     using System.Threading.Tasks;
-    public class SimpleObjectWriter
+    using System.IO;
+    using System.Reflection;
+
+    public sealed class SimpleObjectWriter
     {
-        private TextWriter writer;
+        TextWriter writer;
 
         public SimpleObjectWriter(TextWriter writer)
         {
             this.writer = writer;
         }
 
-        public void Next(object obj)
+        public void Next(object o)
         {
-            adding(obj);
+            WriteObject(o);
         }
 
-        private void adding(object obj)
-        {
-            Type type = obj.GetType();
-            PropertyInfo[] properties = type.GetProperties();
 
-            BindingFlags bindingAttrs = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.GetProperty;
+        private void WriteObject(object o)
+        {
             writer.Write("Instance of ");
-            writer.Write(type.FullName);
-            writer.Write("\r\n");
-            foreach (PropertyInfo info in properties)
+            Type objectType = o.GetType();
+            writer.WriteLine(objectType.FullName);
+            
+            foreach (PropertyInfo pi in objectType.GetProperties())
             {
-                Type infoType = info.PropertyType;
-                if (infoType.IsPrimitive || infoType == typeof(Decimal) || infoType == typeof(String))
+                Type propType = pi.PropertyType;
+                if (propType == typeof(string))
                 {
-                    string name = info.Name;
-                    object srcValue = type.InvokeMember(name, bindingAttrs, null, obj, null);
-                    writer.Write(name);
+                    writer.Write(pi.Name);
+                    writer.Write("=\"");
+                    writer.Write(pi.GetValue(o));
+                    writer.Write("\"");
+                    writer.WriteLine();
+                }
+                else if (propType == typeof(int))
+                {
+                    writer.Write(pi.Name);
                     writer.Write("=");
-                    if (infoType == typeof(String))
-                    {
-                        writer.Write("\"");
-                        writer.Write(srcValue);
-                        writer.Write("\"");
-                    }
-                    else if (infoType == typeof(double))
-                    {
-                        writer.Write(string.Format("{0:F1}"), srcValue);
-                    }
-                    else
-                    {
-                        writer.Write(srcValue);
-                    }
-                    writer.Write("\r\n");
+                    writer.Write(pi.GetValue(o));
+                    writer.WriteLine();
+                }
+                else if (propType == typeof(double))
+                {
+                    writer.Write(pi.Name);
+                    writer.Write("=");
+                    writer.Write(string.Format("{0:F1}", pi.GetValue(o)));
+                    writer.WriteLine();
                 }
                 else
                 {
-                    writer.Write("Location is a nested object...\r\n");
-                    adding(info.GetValue(obj));
+                    writer.Write(pi.Name);
+                    writer.Write(" is a nested object...");
+                    writer.WriteLine();
+                    WriteObject(pi.GetValue(o));
                 }
             }
-            writer.Write("End of instance\r\n");
+            writer.WriteLine("End of instance");
         }
-
     }
 }
