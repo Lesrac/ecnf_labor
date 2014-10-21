@@ -13,22 +13,37 @@
     public class Cities
     {
         public List<City> CityList { get; set; }
-        public int Count { get; set; }
+        public int Count {
+            get
+            {
+                return CityList.Count;
+            }
+        }
 
         public int ReadCities(string filename)
         {
-            CityList = new List<City>();
+            if (CityList == null)
+            {
+                CityList = new List<City>();
+            }
             CultureInfo info = CultureInfo.GetCultureInfo("en-GB");
             using (TextReader reader = new StreamReader(filename))
             {
+                int oldCount = CityList.Count();
                 IEnumerable<string[]> citiesAsStrings = reader.GetSplittedLines('\t');
-                foreach (string[] cs in citiesAsStrings)
-                {
-                    City city = new City(cs[0].Trim(), cs[1].Trim(), int.Parse(cs[2]), Convert.ToDouble(cs[3].Trim(), info), Convert.ToDouble(cs[4].Trim(), info));
-                    this[CityList.Count] = city;
-                }
+                CityList.AddRange(
+                    citiesAsStrings
+                    .Select(cs => new City (
+                            cs[0].Trim(), // City Name
+                            cs[1].Trim(), // Country
+                            int.Parse(cs[2]), // population
+                            double.Parse(cs[3].Trim(), info),    // latitude
+                            double.Parse(cs[4].Trim(), info)    // longitued
+                        )
+                    ));
+                return CityList.Count - oldCount;
             }
-            return CityList.Count;
+            
         }
 
 
@@ -42,10 +57,7 @@
 
         public City FindCity(string cityName)
         {
-            return CityList.Find(delegate(City c)
-            {
-                return string.Compare(c.Name, cityName, true) == 0;
-            });
+            return CityList.Find(c => string.Compare(c.Name, cityName, true) == 0);
         }
 
         public City this[int index]
@@ -63,13 +75,11 @@
                 if (index >= 0 && index < CityList.Count)
                 {
                     CityList[index] = value;
-                    Count++;
                 }
                 else if (index == CityList.Count)
                 {
                     CityList.Add(value);
                     CityList[index] = value;
-                    Count++;
                 }
             }
         }
