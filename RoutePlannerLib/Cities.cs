@@ -13,44 +13,45 @@
     public class Cities
     {
         public List<City> CityList { get; set; }
-        public int Count { get; set; }
+        public int Count
+        {
+            get
+            {
+                return CityList.Count;
+            }
+        }
 
         public int ReadCities(string filename)
         {
-            CityList = new List<City>();
+            if (CityList == null)
+            {
+                CityList = new List<City>();
+            }
             CultureInfo info = CultureInfo.GetCultureInfo("en-GB");
             using (TextReader reader = new StreamReader(filename))
             {
+                int oldCount = CityList.Count;
                 IEnumerable<string[]> citiesAsStrings = reader.GetSplittedLines('\t');
-                foreach (string[] cs in citiesAsStrings)
-                {
-                    City city = new City(cs[0].Trim(), cs[1].Trim(), int.Parse(cs[2]), Convert.ToDouble(cs[3].Trim(), info), Convert.ToDouble(cs[4].Trim(), info));
-                    this[CityList.Count] = city;
-                }
+
+                Func<String[], City> cityCreate =
+                    cs => new City(cs[0].Trim(),
+                        cs[1].Trim(),
+                        int.Parse(cs[2]),
+                        Convert.ToDouble(cs[3].Trim(), info),
+                        Convert.ToDouble(cs[4].Trim(), info));
+
+                CityList.AddRange(citiesAsStrings.Select(cityCreate));
+                return CityList.Count - oldCount;
             }
-            return CityList.Count;
         }
 
 
         public List<City> FindNeighbours(WayPoint location, double distance)
         {
-            /*var query = from city in CityList
-                        where location.Distance(city.Location) <= distance
-                        orderby location.Distance(city.Location)
-                        select city;
-            return new List<City>(query);
-            */
-            List<City> neighbours = new List<City>();
-            foreach (City city in CityList)
-            {
-                double dist = location.Distance(city.Location);
-                Console.WriteLine("Distance: {0}", dist);
-                if (dist <= distance)
-                {
-                    neighbours.Add(city);
-                }
-            }
-            return (neighbours.OrderBy(city => location.Distance(city.Location))).ToList();
+            return CityList
+                .Where(city => location.Distance(city.Location) <= distance)
+                .OrderBy(city => location.Distance(city.Location))
+                .ToList();
         }
 
         public City FindCity(string cityName)
@@ -76,13 +77,11 @@
                 if (index >= 0 && index < CityList.Count)
                 {
                     CityList[index] = value;
-                    Count++;
                 }
                 else if (index == CityList.Count)
                 {
                     CityList.Add(value);
                     CityList[index] = value;
-                    Count++;
                 }
             }
         }
