@@ -33,6 +33,17 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             this.cities = cities;
         }
 
+        public City[] FindCities(TransportModes transportMode)
+        {
+            Func<TransportModes, City[]> citiesInRoutes =
+                t => cities.CityList.Where(
+                    c => routes.Exists(
+                        r => (r.ToCity == c || r.FromCity == c) && r.TransportMode == t))
+                        .ToArray();
+
+            return citiesInRoutes(transportMode);
+        }
+
         /// <summary>
         /// Reads a list of links from the given file.
         /// Reads only links where the cities exist.
@@ -43,7 +54,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
         {
             using (TextReader reader = new StreamReader(filename))
             {
-                foreach(string[] linkAsString in reader.GetSplittedLines('\t'))
+                foreach (string[] linkAsString in reader.GetSplittedLines('\t'))
                 {
                     City city1 = cities.FindCity(linkAsString[0]);
                     City city2 = cities.FindCity(linkAsString[1]);
