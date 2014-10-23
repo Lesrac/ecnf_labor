@@ -66,11 +66,11 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
                     .Where(l => l.TransportMode.Equals(transportMode))
                     .Select(m => m.FromCity);
 
-            var toCitties = routes
+            var toCities = routes
                     .Where(l => l.TransportMode.Equals(transportMode))
                     .Select(m => m.ToCity);
 
-            return fromCities.Union(toCitties).ToArray<City>();
+            return fromCities.Union(toCities).ToArray<City>();
         }
 
         private List<City> FindCitiesBetween(string fromCity, string toCity)
