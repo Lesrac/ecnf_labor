@@ -19,11 +19,6 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             Longitude = _longitude;
         }
 
-        public WayPoint()
-        {
-
-        }
-
         public override string ToString()
         {
             string val = String.Format("WayPoint: {0}/{1}", String.Format("{0:0.00}", Latitude), String.Format("{0:0.00}", Longitude));
