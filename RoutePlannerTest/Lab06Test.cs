@@ -7,6 +7,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerTest
     [TestClass]
     [DeploymentItem("data/citiesTestDataLab3.txt")]
     [DeploymentItem("data/linksTestDataLab3.txt")]
+    [DeploymentItem("data/linksTestDataLab6.txt")]
     public class Lab06Test
     {
         [TestMethod]
@@ -24,6 +25,12 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerTest
             // there must be no cities
             City[] emptyCitiesByMode = routes.FindCities(TransportModes.Bus);
             Assert.AreEqual(0, emptyCitiesByMode.Count());
+
+            routes = new Routes(cities);
+            routes.ReadRoutes(@"linksTestDataLab6.txt");
+
+            City[] notAllCitiesByMode = routes.FindCities(TransportModes.Rail);
+            Assert.AreEqual(8, notAllCitiesByMode.Count());
 
         }
     }

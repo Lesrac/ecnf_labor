@@ -1,0 +1,6 @@
+Genève	Lyon
+Basel	Liestal
+Liestal	Aarau
+Bern	Thun
+Lausanne	Genève
+Genève	Aarau

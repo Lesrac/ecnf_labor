@@ -1,0 +1,59 @@
+﻿namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+<<<<<<< HEAD
+    using System.Reflection;
+    using System.Text;
+    using System.Threading.Tasks;
+=======
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Reflection;
+
+>>>>>>> master
+    public class RoutesFactory
+    {
+        static public IRoutes Create(Cities cities)
+        {
+<<<<<<< HEAD
+            return Create(cities, Properties.Settings.Default.RouteAlgorithm);
+        }
+        static public IRoutes Create(Cities cities, string algorithmClassName)
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Type type = assembly.GetType(algorithmClassName);
+            object instance = null;
+=======
+            return Create(cities,Properties.Settings.Default.RouteAlgorithm);
+        }
+
+        static public IRoutes Create(Cities cities, string algorithmClassName)
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Module module = assembly.GetModules()[0];
+            Type type = module.GetType(algorithmClassName);
+>>>>>>> master
+            if (type == null)
+            {
+                return null;
+            }
+<<<<<<< HEAD
+            instance = Activator.CreateInstance(type, cities);
+            if (instance is IRoutes)
+            {
+                return (IRoutes)instance;
+            }
+            return null;
+=======
+            ConstructorInfo ci = type.GetConstructor(new Type[] { typeof(Cities) });
+            if(ci == null) {
+                return null;
+            }
+            object factory = ci.Invoke(new object[]{cities});
+            return factory as IRoutes;
+>>>>>>> master
+        }
+    }
+}

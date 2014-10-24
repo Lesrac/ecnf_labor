@@ -68,6 +68,9 @@
     <Content Include="data\citiesTestDataLab4.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="data\linksTestDataLab6.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="data\linksTestDataLab3.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

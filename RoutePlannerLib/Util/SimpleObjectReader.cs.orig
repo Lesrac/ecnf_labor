@@ -1,0 +1,357 @@
+﻿namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib.Util
+{
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+<<<<<<< HEAD
+    public class SimpleObjectReader
+    {
+        public SimpleObjectReader(TextReader reader)
+        {
+
+=======
+    using System.Text.RegularExpressions;
+    using System.Reflection;
+   
+
+    public sealed class SimpleObjectReader
+    {
+        private TextReader reader;
+        private ObjectBuilder builder;
+
+        public SimpleObjectReader(TextReader reader)
+        {
+            this.reader = reader;
+            builder = new ObjectBuilder();
+>>>>>>> master
+        }
+
+        public object Next()
+        {
+<<<<<<< HEAD
+            return null;
+        }
+
+=======
+            ILineHandler rootHandler = CreateLineHandler();
+            while (!builder.CanBuild)
+            {
+                string line = reader.ReadLine();
+                if (line == null)
+                {
+                    return null;
+                }
+                rootHandler.Handle(line);
+            }
+            return builder.Build();
+        }
+
+        private ILineHandler CreateLineHandler()
+        {
+            ILineHandler instanceOfHandler = new InstanceOfHandler(builder);
+            ILineHandler stringHandler = new StringPropertyHandler(builder);
+            ILineHandler doubleHandler = new DoublePropertyHandler(builder);
+            ILineHandler intHandler = new IntPropertyHandler(builder);
+            ILineHandler nestedHandler = new NestedPropertyHandler(builder);
+            ILineHandler endInstanceHandler = new EndOfInstanceHandler(builder);
+
+            instanceOfHandler.Successor = stringHandler;
+            stringHandler.Successor = doubleHandler;
+            doubleHandler.Successor = intHandler;
+            intHandler.Successor = nestedHandler;
+            nestedHandler.Successor = endInstanceHandler;
+
+            return instanceOfHandler;
+        }
+
+        interface ILineHandler
+        {
+            ILineHandler Successor
+            {
+                get;set;
+            }
+
+            void Handle(string line);
+            
+        }
+
+        abstract class AbstractLineHandler : ILineHandler
+        {
+            private int successorReentryCount = 0;
+
+            protected AbstractLineHandler(ObjectBuilder builder) {
+                Builder = builder;
+            } 
+
+            protected TextReader Reader {
+                get;
+                private set;
+            }
+
+            protected ObjectBuilder Builder {
+                get;
+                private set;
+            }
+
+            public ILineHandler Successor
+            {
+                get;
+                set;
+            }
+
+            protected void HandleBySuccessor(string line)
+            {
+                if (Successor == null)
+                {
+                    string msg = string.Format("'{0}' can not be handled", line);
+                    throw new ArgumentException(msg);
+                }
+                Successor.Handle(line);
+            }
+
+            public abstract void Handle(string line);
+        }
+
+        class InstanceOfHandler : AbstractLineHandler
+        {
+            public InstanceOfHandler(ObjectBuilder builder) : base(builder)
+            {
+            }
+
+            public override void Handle(string line)
+            {
+                Match match = Regex.Match(line,@"Instance of (.*)");
+                if (match.Success)
+                {
+                    string objectType = match.Groups[1].ToString();
+                    Builder.CreateObject(objectType);
+                }
+                else
+                {
+                    HandleBySuccessor(line);
+                }
+            }
+        }
+
+        class StringPropertyHandler : AbstractLineHandler
+        {
+            public StringPropertyHandler(ObjectBuilder builder)
+                : base(builder)
+            {
+            }
+
+            public override void Handle(string line)
+            {
+                Match match = Regex.Match(line, "(.*)=\"(.*)\"");
+                if (match.Success)
+                {
+                    string propertyName = match.Groups[1].ToString();
+                    string propertyValue = match.Groups[2].ToString();
+                    Builder.SetString(propertyName, propertyValue);
+                }
+                else
+                {
+                    HandleBySuccessor(line);
+                }
+            }
+        }
+
+        class IntPropertyHandler : AbstractLineHandler
+        {
+            public IntPropertyHandler(ObjectBuilder builder)
+                : base(builder)
+            {
+            }
+
+            public override void Handle(string line)
+            {
+                Match match = Regex.Match(line, "(.*)=([0-9]+)");
+                if (match.Success)
+                {
+                    string propertyName = match.Groups[1].ToString();
+                    string propertyValue = match.Groups[2].ToString();
+                    Builder.SetInt(propertyName, propertyValue);
+                }
+                else
+                {
+                    HandleBySuccessor(line);
+                }
+            }
+        }
+
+        class DoublePropertyHandler : AbstractLineHandler
+        {
+            public DoublePropertyHandler(ObjectBuilder builder)
+                : base(builder)
+            {
+            }
+
+            public override void Handle(string line)
+            {
+                Match match = Regex.Match(line, @"(.*)=([0-9]+[\.][0-9]{1})");
+                if (match.Success)
+                {
+                    string propertyName = match.Groups[1].ToString();
+                    string propertyValue = match.Groups[2].ToString();
+                    Builder.SetDouble(propertyName, propertyValue);
+                }
+                else
+                {
+                    HandleBySuccessor(line);
+                }
+            }
+        }
+
+        class NestedPropertyHandler : AbstractLineHandler
+        {
+            public NestedPropertyHandler(ObjectBuilder builder)
+                : base(builder)
+            {
+            }
+
+            public override void Handle(string line)
+            {
+                Match match = Regex.Match(line, "(.*) is a nested object.*");
+                if (match.Success)
+                {
+                    string propertyName = match.Groups[1].ToString();
+                    Builder.PrepareNested(propertyName);
+                }
+                else
+                {
+                    HandleBySuccessor(line);
+                }
+            }
+        }
+
+        class EndOfInstanceHandler : AbstractLineHandler
+        {
+            public EndOfInstanceHandler(ObjectBuilder builder)
+                : base(builder)
+            {
+            }
+
+            public override void Handle(string line)
+            {
+                Match match = Regex.Match(line, "End of instance");
+                if (match.Success)
+                {
+                    Builder.EndInstance();
+                }
+                else
+                {
+                    HandleBySuccessor(line);
+                }
+            }
+        }
+
+        class ObjectBuilder
+        {
+            private object root;
+            private string nestedPropertyName;
+            private Stack<object> objStack;
+            private Assembly assembly;
+
+            public ObjectBuilder()
+            {
+                objStack = new Stack<object>();
+                assembly = Assembly.GetCallingAssembly();
+            }
+
+            private object Current
+            {
+                get
+                {
+                    return objStack.Peek();
+                }
+            }
+
+            public void CreateObject(string type)
+            {
+                object newObject = assembly.CreateInstance(type);
+                if (nestedPropertyName != null)
+                {
+                    SetProperty(nestedPropertyName, newObject);
+                    nestedPropertyName = null;
+                }
+                objStack.Push(newObject);
+            }
+
+            void SetProperty(string name, object value)
+            {
+                Type objType = Current.GetType();
+                Type targetType = value.GetType();
+                PropertyInfo pi = objType.GetProperty(name);
+                if (pi == null)
+                {
+                    string msg = string.Format("Unknown property {0}", name);
+                    throw new ArgumentException(msg);
+                }
+                if (!(pi.PropertyType == value.GetType()))
+                {
+                    string msg = string.Format("Invalid data type. Property {0} is not a {1}", name, targetType.Name);
+                    throw new ArgumentException(msg);
+                }
+                pi.SetValue(Current, value);
+            }
+
+            public void SetString(string name, string value)
+            {
+                SetProperty(name, value);
+            }
+
+            public void SetDouble(string name, string value)
+            {
+                SetProperty(name, double.Parse(value));
+            }
+
+            public void SetInt(string name, string value)
+            {
+                SetProperty(name, int.Parse(value));
+            }
+
+            public void PrepareNested(string nestedName)
+            {
+                if (this.nestedPropertyName != null)
+                {
+                    throw new ArgumentException("Nested state already set");
+                }
+                this.nestedPropertyName = nestedName;
+            }
+
+            public void EndInstance()
+            {
+                if (objStack.Count >= 1)
+                {
+                    if(objStack.Count == 1)
+                    {
+                        root = objStack.Peek();
+                    }
+                    objStack.Pop();
+                }
+            }
+
+            public bool CanBuild
+            {
+                get
+                {
+                    return root != null
+                        && objStack.Count == 0;
+                }
+            }
+
+            public object Build()
+            {
+                object result = root;
+                root = null;
+                return result;
+            }
+        }
+
+        
+>>>>>>> master
+    }
+}

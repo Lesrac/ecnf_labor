@@ -33,6 +33,17 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             this.cities = cities;
         }
 
+        public City[] FindCities(TransportModes transportMode)
+        {
+            Func<TransportModes, City[]> citiesInRoutes =
+                t => cities.CityList.Where(
+                    c => routes.Exists(
+                        r => (r.ToCity == c || r.FromCity == c) && r.TransportMode == t))
+                        .ToArray();
+
+            return citiesInRoutes(transportMode);
+        }
+
         /// <summary>
         /// Reads a list of links from the given file.
         /// Reads only links where the cities exist.
@@ -43,21 +54,23 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
         {
             using (TextReader reader = new StreamReader(filename))
             {
-                foreach(string[] linkAsString in reader.GetSplittedLines('\t'))
-                {
-                    City city1 = cities.FindCity(linkAsString[0]);
-                    City city2 = cities.FindCity(linkAsString[1]);
-                    // only add links, where the cities are found 
-                    if ((city1 != null) && (city2 != null))
-                    {
-                        routes.Add(new Link(city1, city2, city1.Location.Distance(city2.Location),
-                                                   TransportModes.Rail));
-                    }
-                }
+                List<string[]> existingCities = reader.GetSplittedLines('\t')
+                    .Where(s => cities.FindCity(s[0]) != null && cities.FindCity(s[1]) != null)
+                    .ToList();
+
+                List<City[]> cits = existingCities.Select(str =>
+                     str.Select(
+                        s => cities.FindCity(s))
+                        .ToArray()
+                ).ToList();
+
+                List<Link> links = cits.Select(
+                    la => new Link(la[0], la[1], la[0].Location.Distance(la[1].Location), TransportModes.Rail))
+                    .ToList();
+
+                routes.AddRange(links);
             }
-
             return Count;
-
         }
 
         public City[] FindCities(TransportModes transportMode)
@@ -80,23 +93,18 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 
         private List<Link> FindPath(List<City> cities, TransportModes mode)
         {
-            List<Link> resultPath = new List<Link>();
+            City fromCity = cities.First();
+            List<Link> links = cities
+                .Skip(1)
+                .Select(c => {
+                    Link l = FindLink(fromCity, c, mode);
+                    fromCity = c;
+                    return l;
+                })
+                .Where(c => c != null)
+                .ToList(); 
 
-            City fromCity = null;
-            foreach (City toCity in cities)
-            {
-                if (fromCity != null)
-                {
-                    Link l = FindLink(fromCity, toCity, mode);
-                    if (l != null)
-                    {
-                        resultPath.Add(l);
-                    }
-                }
-                fromCity = toCity;
-            }
-
-            return resultPath;
+            return links;
         }
 
         #region Lab04: Dijkstra implementation
