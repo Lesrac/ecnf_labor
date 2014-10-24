@@ -19,7 +19,6 @@
                 return CityList.Count;
             }
         }
-        }
 
         public int ReadCities(string filename)
         {
