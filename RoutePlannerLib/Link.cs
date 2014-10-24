@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
+﻿namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     public enum TransportModes { Ship, Rail, Flight, Car, Bus, Tram };
 
     /// <summary>
@@ -67,21 +68,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
         /// <returns>true if both link-cities are in the list</returns>
         internal bool IsIncludedIn(List<City> cities)
         {
-            var foundFrom = false;
-            var foundTo = false;
-            foreach (var c in cities)
-            {
-                if (!foundFrom && c.Name == FromCity.Name)
-                    foundFrom = true;
-
-                if (!foundTo && c.Name == ToCity.Name)
-                    foundTo = true;
-
-                if (foundTo && foundFrom)
-                    return true;
-            }
-
-            return false;
+            return cities.Exists(c => c.Name == FromCity.Name && c.Name == ToCity.Name);
         }
 
     }
