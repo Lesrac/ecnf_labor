@@ -33,17 +33,6 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             this.cities = cities;
         }
 
-        public City[] FindCities(TransportModes transportMode)
-        {
-            Func<TransportModes, City[]> citiesInRoutes =
-                t => cities.CityList.Where(
-                    c => routes.Exists(
-                        r => (r.ToCity == c || r.FromCity == c) && r.TransportMode == t))
-                        .ToArray();
-
-            return citiesInRoutes(transportMode);
-        }
-
         /// <summary>
         /// Reads a list of links from the given file.
         /// Reads only links where the cities exist.
