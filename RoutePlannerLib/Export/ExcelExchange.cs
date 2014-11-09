@@ -13,10 +13,6 @@
         public void WriteToFile(String fileName, City from, City to, List<Link> links)
         {
             Application app = new Application();
-            if (app == null)
-            {
-                throw new InvalidComObjectException("Excel is not properly installed");
-            }
             Workbook wb = app.Workbooks.Add();
             Worksheet ws = wb.Worksheets.get_Item(0);
             ws.Range["A1"].Value = "From";
@@ -39,6 +35,8 @@
                 ws.Range["C" + localRow].Value = l.Distance;
                 ws.Range["D" + localRow].Value = l.TransportMode;
             });
+
+            wb.SaveAs(fileName, app.DisplayAlerts);
         }
     }
 }
