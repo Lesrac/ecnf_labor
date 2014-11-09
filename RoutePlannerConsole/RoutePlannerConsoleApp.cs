@@ -5,6 +5,7 @@
     using Fhnw.Ecnf.RoutePlanner.RoutePlannerLib;
     using System.Collections.Generic;
     using Fhnw.Ecnf.RoutePlanner.RoutePlannerLib.Util;
+    using Fhnw.Ecnf.RoutePlanner.RoutePlannerLib.Export;
     using System.IO;
 
     class RoutePlannerConsoleApp
@@ -64,6 +65,12 @@
                 Console.WriteLine("from {0} to {1} in {2}", link.FromCity.Name, link.ToCity.Name, link.Distance);
             }
             Console.ReadKey();
+
+            City zurich = c.FindCity("Zürich");
+            City winterthur = c.FindCity("Winterthur");
+            ExcelExchange export = new ExcelExchange();
+            export.WriteToFile("Test.xls", zurich, winterthur,l);
+            
         }
     }
 }
