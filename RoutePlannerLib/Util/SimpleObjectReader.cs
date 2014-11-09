@@ -8,7 +8,7 @@
     using System.Threading.Tasks;
     using System.Text.RegularExpressions;
     using System.Reflection;
-   
+    using System.Globalization;
 
     public sealed class SimpleObjectReader
     {
@@ -67,8 +67,6 @@
 
         abstract class AbstractLineHandler : ILineHandler
         {
-            private int successorReentryCount = 0;
-
             protected AbstractLineHandler(ObjectBuilder builder) {
                 Builder = builder;
             } 
@@ -292,7 +290,7 @@
 
             public void SetDouble(string name, string value)
             {
-                SetProperty(name, double.Parse(value));
+                SetProperty(name, double.Parse(value,CultureInfo.InvariantCulture));
             }
 
             public void SetInt(string name, string value)

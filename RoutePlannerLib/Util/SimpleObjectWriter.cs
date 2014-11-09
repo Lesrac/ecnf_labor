@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
     using System.IO;
     using System.Reflection;
+    using System.Globalization;
 
     public sealed class SimpleObjectWriter
     {
@@ -49,9 +50,10 @@
                 }
                 else if (propType == typeof(double))
                 {
+                    double value = (double)pi.GetValue(o);
                     writer.Write(pi.Name);
                     writer.Write("=");
-                    writer.Write(string.Format("{0:F1}", pi.GetValue(o)));
+                    writer.Write(value.ToString("F1", CultureInfo.InvariantCulture));
                     writer.WriteLine();
                 }
                 else
