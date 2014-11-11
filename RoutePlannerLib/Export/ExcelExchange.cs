@@ -14,7 +14,7 @@
         {
             Application app = new Application();
             Workbook wb = app.Workbooks.Add();
-            Worksheet ws = wb.Worksheets.get_Item(0);
+            Worksheet ws = wb.Worksheets.Add();
             ws.Range["A1"].Value = "From";
             ws.Range["B1"].Value = "To";
             ws.Range["C1"].Value = "Distance";
@@ -36,7 +36,8 @@
                 ws.Range["D" + localRow].Value = l.TransportMode;
             });
 
-            wb.SaveAs(fileName, app.DisplayAlerts);
+            wb.SaveAs(fileName, XlFileFormat.xlOpenXMLWorkbook);
+            wb.Close();
         }
     }
 }
