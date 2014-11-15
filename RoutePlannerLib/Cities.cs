@@ -9,9 +9,12 @@
     using System.Threading.Tasks;
     using System.Xml;
     using Fhnw.Ecnf.RoutePlanner.RoutePlannerLib.Util;
+    using System.Diagnostics;
 
     public class Cities
     {
+        private static readonly TraceSource logger = new TraceSource("Fhnw.Ecnf.RoutePlanner.RoutePlannerLib.Cities");
+
         public List<City> CityList { get; set; }
         public int Count {
             get
@@ -22,13 +25,17 @@
 
         public int ReadCities(string filename)
         {
+            logger.TraceInformation("ReadCities started");
             if (CityList == null)
             {
                 CityList = new List<City>();
+                logger.TraceEvent(TraceEventType.Verbose, 0, "CityList initialized");
             }
+            logger.TraceEvent(TraceEventType.Information, 0, "Reading cities form file {0}", filename);
             CultureInfo info = CultureInfo.GetCultureInfo("en-GB");
             using (TextReader reader = new StreamReader(filename))
             {
+                
                 int oldCount = CityList.Count();
                 IEnumerable<string[]> citiesAsStrings = reader.GetSplittedLines('\t');
                 CityList.AddRange(
@@ -41,7 +48,10 @@
                             double.Parse(cs[4].Trim(), info)    // longitued
                         )
                     ));
-                return CityList.Count - oldCount;
+                int difference = CityList.Count - oldCount;
+                logger.TraceEvent(TraceEventType.Verbose, 0, "Added {0} cities to the actual list of cities", difference);
+                logger.TraceInformation("ReadCities ended");
+                return difference;
             }
             
         }

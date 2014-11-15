@@ -8,6 +8,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
     using System.Linq;
     using Fhnw.Ecnf.RoutePlanner.RoutePlannerLib;
     using Fhnw.Ecnf.RoutePlanner.RoutePlannerLib.Util;
+    using System.Diagnostics;
 
     public delegate void RouteRequestHandler(object sender, RouteRequestEventArgs e);
     /// <summary>
@@ -15,6 +16,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
     /// </summary>
     public class Routes : IRoutes
     {
+        private static readonly TraceSource logger = new TraceSource("Fhnw.Ecnf.RoutePlanner.RoutePlannerLib.Routes");
         public event RouteRequestHandler RouteRequestEvent;
         List<Link> routes = new List<Link>();
         Cities cities;
@@ -41,6 +43,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
         /// <returns>number of read route</returns>
         public int ReadRoutes(string filename)
         {
+            logger.TraceInformation("ReadRoutes started");
             using (TextReader reader = new StreamReader(filename))
             {
                 List<string[]> existingCities = reader.GetSplittedLines('\t')
@@ -59,6 +62,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 
                 routes.AddRange(links);
             }
+            logger.TraceInformation("ReadRoutes ended");
             return Count;
         }
 
