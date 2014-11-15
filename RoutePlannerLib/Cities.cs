@@ -33,25 +33,35 @@
             }
             logger.TraceEvent(TraceEventType.Information, 0, "Reading cities form file {0}", filename);
             CultureInfo info = CultureInfo.GetCultureInfo("en-GB");
-            using (TextReader reader = new StreamReader(filename))
+            try
             {
-                
-                int oldCount = CityList.Count();
-                IEnumerable<string[]> citiesAsStrings = reader.GetSplittedLines('\t');
-                CityList.AddRange(
-                    citiesAsStrings
-                    .Select(cs => new City (
-                            cs[0].Trim(), // City Name
-                            cs[1].Trim(), // Country
-                            int.Parse(cs[2]), // population
-                            double.Parse(cs[3].Trim(), info),    // latitude
-                            double.Parse(cs[4].Trim(), info)    // longitued
-                        )
-                    ));
-                int difference = CityList.Count - oldCount;
-                logger.TraceEvent(TraceEventType.Verbose, 0, "Added {0} cities to the actual list of cities", difference);
-                logger.TraceInformation("ReadCities ended");
-                return difference;
+                using (TextReader reader = new StreamReader(filename))
+                {
+
+                    int oldCount = CityList.Count();
+                    IEnumerable<string[]> citiesAsStrings = reader.GetSplittedLines('\t');
+                    CityList.AddRange(
+                        citiesAsStrings
+                        .Select(cs => new City(
+                                cs[0].Trim(), // City Name
+                                cs[1].Trim(), // Country
+                                int.Parse(cs[2]), // population
+                                double.Parse(cs[3].Trim(), info),    // latitude
+                                double.Parse(cs[4].Trim(), info)    // longitued
+                            )
+                        ));
+                    int difference = CityList.Count - oldCount;
+                    logger.TraceEvent(TraceEventType.Verbose, 0, "Added {0} cities to the actual list of cities", difference);
+                    logger.TraceInformation("ReadCities ended");
+                    return difference;
+                }
+            }
+            catch (IOException ex)
+            {
+                // Bad, ugly code. You should not catch an exception only
+                // because you want to log it!!!!
+                logger.TraceEvent(TraceEventType.Critical, 0, ex.StackTrace);
+                throw;
             }
             
         }
