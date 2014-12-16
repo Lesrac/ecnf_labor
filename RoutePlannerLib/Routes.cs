@@ -9,6 +9,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
     using Fhnw.Ecnf.RoutePlanner.RoutePlannerLib;
     using Fhnw.Ecnf.RoutePlanner.RoutePlannerLib.Util;
     using System.Diagnostics;
+    using System.Threading.Tasks;
 
     public delegate void RouteRequestHandler(object sender, RouteRequestEventArgs e);
     /// <summary>
@@ -100,6 +101,12 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
                 .ToList(); 
 
             return links;
+        }
+
+
+        public Task<List<Link>> GoFindShortestRouteBetween(string fromCity, string toCity, TransportModes mode, Progress<string> progress = null)
+        {
+            return Task.Run(() => FindShortestRouteBetween(fromCity, toCity, mode));
         }
 
         public abstract List<Link> FindShortestRouteBetween(string fromCity, string toCity, TransportModes mode);
