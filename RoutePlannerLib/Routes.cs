@@ -106,10 +106,10 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 
         public Task<List<Link>> GoFindShortestRouteBetween(string fromCity, string toCity, TransportModes mode, Progress<string> progress = null)
         {
-            return Task.Run(() => FindShortestRouteBetween(fromCity, toCity, mode));
+            return Task.Run(() => FindShortestRouteBetween(fromCity, toCity, mode, progress));
         }
 
-        public abstract List<Link> FindShortestRouteBetween(string fromCity, string toCity, TransportModes mode);
+        public abstract List<Link> FindShortestRouteBetween(string fromCity, string toCity, TransportModes mode, IProgress<string> progress = null);
 
         protected void NotifyObservers(City fromCity,City toCity,TransportModes mode) {
             if (RouteRequestEvent != null)
@@ -126,6 +126,14 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
                     && ((fromC.Equals(l.FromCity) && toC.Equals(l.ToCity))
                          || (toC.Equals(l.FromCity) && fromC.Equals(l.ToCity)))
                     select new Link(fromC, toC, l.Distance, TransportModes.Rail)).FirstOrDefault();
+        }
+
+        protected void NotifyProgress(IProgress<string> progress, String message)
+        {
+            if (progress != null)
+            {
+                progress.Report(message);
+            }
         }
     }
 }

@@ -21,9 +21,10 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
         }
 
         #region Lab04: Dijkstra implementation
-        public override List<Link> FindShortestRouteBetween(string fromCity, string toCity, TransportModes mode)
+        public override List<Link> FindShortestRouteBetween(string fromCity, string toCity, TransportModes mode, IProgress<string> progress = null)
         {
             var citiesBetween = FindCitiesBetween(fromCity, toCity);
+            NotifyProgress(progress, "FindCitiesBetween done");
             if (citiesBetween == null || citiesBetween.Count < 1 || routes == null || routes.Count < 1)
             {
                 return null;
@@ -35,15 +36,21 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             Dictionary<City, double> dist;
             Dictionary<City, City> previous;
             var q = FillListOfNodes(citiesBetween, out dist, out previous);
+            NotifyProgress(progress, "FillListOfNodes done");
             dist[source] = 0.0;
 
             // the actual algorithm
             previous = SearchShortestPath(mode, q, dist, previous);
+            NotifyProgress(progress, "Searching shortest path done");
 
             // create a list with all cities on the route
             var citiesOnRoute = GetCitiesOnRoute(source, target, previous);
+            NotifyProgress(progress, "GetCitiesOnRoute done");
             // prepare final list if links
-            return FindPath(citiesOnRoute, mode);
+            List<Link> result = FindPath(citiesOnRoute, mode);
+            NotifyProgress(progress, "FindPath done");
+
+            return result;
         }
 
         private static List<City> FillListOfNodes(List<City> cities, out Dictionary<City, double> dist, out Dictionary<City, City> previous)

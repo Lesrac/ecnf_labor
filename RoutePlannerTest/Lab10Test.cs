@@ -53,7 +53,6 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerTest
         }
 
         [TestMethod]
-        [Ignore]
         public async Task TestFindShortestRouteBetweenAsynchProgress()
         {
             var cities = new Cities();
