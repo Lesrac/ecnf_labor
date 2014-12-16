@@ -14,12 +14,12 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
     /// <summary>
     /// Manages a routes from a city to another city.
     /// </summary>
-    public class Routes : IRoutes
+    public abstract class Routes : IRoutes
     {
         private static readonly TraceSource logger = new TraceSource("Fhnw.Ecnf.RoutePlanner.RoutePlannerLib.Routes");
-        public event RouteRequestHandler RouteRequestEvent;
-        List<Link> routes = new List<Link>();
-        Cities cities;
+        protected List<Link> routes = new List<Link>();
+        private Cities cities;
+        public abstract event RouteRequestHandler RouteRequestEvent;
 
         public int Count
         {
@@ -79,12 +79,12 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             return fromCities.Union(toCities).ToArray<City>();
         }
 
-        private List<City> FindCitiesBetween(string fromCity, string toCity)
+        protected List<City> FindCitiesBetween(string fromCity, string toCity)
         {
             return cities.FindCitiesBetween(cities.FindCity(fromCity), cities.FindCity(toCity));
         }
 
-        private List<Link> FindPath(List<City> cities, TransportModes mode)
+        protected List<Link> FindPath(List<City> cities, TransportModes mode)
         {
             City fromCity = cities.First();
             List<Link> links = cities
@@ -100,146 +100,8 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             return links;
         }
 
-        #region Lab04: Dijkstra implementation
-        public List<Link> FindShortestRouteBetween(string fromCity, string toCity, TransportModes mode)
-        {
-            var citiesBetween = FindCitiesBetween(fromCity, toCity);
-            if (citiesBetween == null || citiesBetween.Count < 1 || routes == null || routes.Count < 1)
-            {
-                return null;
-            }
+        protected abstract Link FindLink(City fromC, City toC, TransportModes mode);
 
-            var source = citiesBetween[0];
-            var target = citiesBetween[citiesBetween.Count - 1];
-            if (RouteRequestEvent != null)
-            {
-                RouteRequestEvent(this, new RouteRequestEventArgs(source, target, mode));
-            }
-            Dictionary<City, double> dist;
-            Dictionary<City, City> previous;
-            var q = FillListOfNodes(citiesBetween, out dist, out previous);
-            dist[source] = 0.0;
-
-            // the actual algorithm
-            previous = SearchShortestPath(mode, q, dist, previous);
-
-            // create a list with all cities on the route
-            var citiesOnRoute = GetCitiesOnRoute(source, target, previous);
-            // prepare final list if links
-            return FindPath(citiesOnRoute, mode);
-        }
-
-        private static List<City> FillListOfNodes(List<City> cities, out Dictionary<City, double> dist, out Dictionary<City, City> previous)
-        {
-            var q = new List<City>(); // the set of all nodes (cities) in Graph ;
-            dist = new Dictionary<City, double>();
-            previous = new Dictionary<City, City>();
-            foreach (var v in cities)
-            {
-                dist[v] = double.MaxValue;
-                previous[v] = null;
-                q.Add(v);
-            }
-
-            return q;
-        }
-
-        private Link FindLink(City fromC, City toC, TransportModes mode)
-        {
-
-            return (from l in this.routes
-                    where mode.Equals(l.TransportMode)
-                    && ((fromC.Equals(l.FromCity) && toC.Equals(l.ToCity))
-                         || (toC.Equals(l.FromCity) && fromC.Equals(l.ToCity)))
-                    select new Link(fromC, toC, l.Distance, TransportModes.Rail)).FirstOrDefault();
-        }
-
-        /// <summary>
-        /// Searches the shortest path for cities and the given links
-        /// </summary>
-        /// <param name="mode">transportation mode</param>
-        /// <param name="q"></param>
-        /// <param name="dist"></param>
-        /// <param name="previous"></param>
-        /// <returns></returns>
-        private Dictionary<City, City> SearchShortestPath(TransportModes mode, List<City> q, Dictionary<City, double> dist, Dictionary<City, City> previous)
-        {
-            while (q.Count > 0)
-            {
-                City u = null;
-                var minDist = double.MaxValue;
-                // find city u with smallest dist
-                foreach (var c in q)
-                    if (dist[c] < minDist)
-                    {
-                        u = c;
-                        minDist = dist[c];
-                    }
-
-                if (u != null)
-                {
-                    q.Remove(u);
-                    foreach (var n in FindNeighbours(u, mode))
-                    {
-                        var l = FindLink(u, n, mode);
-                        var d = dist[u];
-                        if (l != null)
-                            d += l.Distance;
-                        else
-                            d += double.MaxValue;
-
-                        if (dist.ContainsKey(n) && d < dist[n])
-                        {
-                            dist[n] = d;
-                            previous[n] = u;
-                        }
-                    }
-                }
-                else
-                    break;
-
-            }
-
-            return previous;
-        }
-
-
-        /// <summary>
-        /// Finds all neighbor cities of a city. 
-        /// </summary>
-        /// <param name="city">source city</param>
-        /// <param name="mode">transportation mode</param>
-        /// <returns>list of neighbor cities</returns>
-        private List<City> FindNeighbours(City city, TransportModes mode)
-        {
-            var neighbors = new List<City>();
-            foreach (var r in routes)
-                if (mode.Equals(r.TransportMode))
-                {
-                    if (city.Equals(r.FromCity))
-                        neighbors.Add(r.ToCity);
-                    else if (city.Equals(r.ToCity))
-                        neighbors.Add(r.FromCity);
-                }
-
-            return neighbors;
-        }
-
-        private List<City> GetCitiesOnRoute(City source, City target, Dictionary<City, City> previous)
-        {
-            var citiesOnRoute = new List<City>();
-            var cr = target;
-            while (previous[cr] != null)
-            {
-                citiesOnRoute.Add(cr);
-                cr = previous[cr];
-            }
-            citiesOnRoute.Add(source);
-
-            citiesOnRoute.Reverse();
-            return citiesOnRoute;
-        }
-        #endregion
-
+        public abstract List<Link> FindShortestRouteBetween(string fromCity, string toCity, TransportModes mode);
     }
 }

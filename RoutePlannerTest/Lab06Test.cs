@@ -15,7 +15,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerTest
         {
             Cities cities = new Cities();
             cities.ReadCities(@"citiesTestDataLab3.txt");
-            var routes = new Routes(cities);
+            var routes = new RoutesDijkstra(cities);
             routes.ReadRoutes(@"linksTestDataLab3.txt");
 
             City[] citiesByMode = routes.FindCities(TransportModes.Rail);
@@ -26,7 +26,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerTest
             City[] emptyCitiesByMode = routes.FindCities(TransportModes.Bus);
             Assert.AreEqual(0, emptyCitiesByMode.Count());
 
-            routes = new Routes(cities);
+            routes = new RoutesDijkstra(cities);
             routes.ReadRoutes(@"linksTestDataLab6.txt");
 
             City[] notAllCitiesByMode = routes.FindCities(TransportModes.Rail);

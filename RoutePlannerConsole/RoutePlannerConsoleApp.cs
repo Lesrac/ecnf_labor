@@ -46,7 +46,7 @@
             c.FindNeighbours(wp,2000);
             c.ReadCities("citiesTestDataLab2.txt");
 
-            var routes = new Routes(c);
+            var routes = new RoutesDijkstra(c);
             var reqWatch = new RouteRequestWatcher();
             routes.RouteRequestEvent += reqWatch.LogRouteRequests;
             routes.FindShortestRouteBetween("Mumbai", "India", TransportModes.Rail);
@@ -56,7 +56,7 @@
             Console.WriteLine("City found: {0}", c.FindCity("Mumbai").Name);
 
             c.ReadCities("citiesTestDataLab4.txt");
-            Routes r = new Routes(c);
+            Routes r = new RoutesDijkstra(c);
             r.RouteRequestEvent += reqWatch.LogRouteRequests;
             r.ReadRoutes("linksTestDataLab4.txt");
             List<Link> l = r.FindShortestRouteBetween("Zürich", "Winterthur", TransportModes.Rail);

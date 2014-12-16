@@ -56,6 +56,7 @@
     <Compile Include="Link.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteRequestEventArgs.cs" />
+    <Compile Include="RoutesDijkstra.cs" />
     <Compile Include="Routes.cs" />
     <Compile Include="RoutesFactory.cs" />
     <Compile Include="Util\SimpleObjectReader.cs" />
