@@ -22,6 +22,8 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
            
         }
 
+        public bool ExecuteParallel { set; get; }
+
 
         public override List<Link> FindShortestRouteBetween(string fromCity, string toCity,
                                         TransportModes mode)
