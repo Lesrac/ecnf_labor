@@ -61,16 +61,6 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             return q;
         }
 
-        protected override Link FindLink(City fromC, City toC, TransportModes mode)
-        {
-
-            return (from l in routes
-                    where mode.Equals(l.TransportMode)
-                    && ((fromC.Equals(l.FromCity) && toC.Equals(l.ToCity))
-                         || (toC.Equals(l.FromCity) && fromC.Equals(l.ToCity)))
-                    select new Link(fromC, toC, l.Distance, TransportModes.Rail)).FirstOrDefault();
-        }
-
         /// <summary>
         /// Searches the shortest path for cities and the given links
         /// </summary>

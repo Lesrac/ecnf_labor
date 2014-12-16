@@ -100,8 +100,6 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             return links;
         }
 
-        protected abstract Link FindLink(City fromC, City toC, TransportModes mode);
-
         public abstract List<Link> FindShortestRouteBetween(string fromCity, string toCity, TransportModes mode);
 
         protected void NotifyObservers(City fromCity,City toCity,TransportModes mode) {
@@ -109,6 +107,16 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             {
                 RouteRequestEvent(this, new RouteRequestEventArgs(fromCity, toCity, mode));
             }
+        }
+
+        protected Link FindLink(City fromC, City toC, TransportModes mode)
+        {
+
+            return (from l in routes
+                    where mode.Equals(l.TransportMode)
+                    && ((fromC.Equals(l.FromCity) && toC.Equals(l.ToCity))
+                         || (toC.Equals(l.FromCity) && fromC.Equals(l.ToCity)))
+                    select new Link(fromC, toC, l.Distance, TransportModes.Rail)).FirstOrDefault();
         }
     }
 }
