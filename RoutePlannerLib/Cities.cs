@@ -130,8 +130,19 @@
                         && c.Location.Longitude > minLon && c.Location.Longitude < maxLon));
 
             foundCities.Add(to);
+            InitIndexForAlgorithm(foundCities); 
             return foundCities;
         }
         #endregion
+
+        private List<City> InitIndexForAlgorithm(List<City> foundCities)
+        {
+            // set index for FloydWarshall
+            for (int index = 0; index < foundCities.Count; index++)
+            {
+                foundCities[index].Index = index;
+            }
+            return foundCities;
+        }
     }
 }
