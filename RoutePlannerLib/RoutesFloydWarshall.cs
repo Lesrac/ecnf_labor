@@ -22,9 +22,6 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
            
         }
 
-        public bool ExecuteParallel { set; get; }
-
-
         public override List<Link> FindShortestRouteBetween(string fromCity, string toCity,
                                         TransportModes mode)
         {
@@ -39,9 +36,15 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 			Stopwatch stopWatch = new Stopwatch();
 			stopWatch.Start();
 			long ts0=stopWatch.ElapsedMilliseconds;
-
-            Setup(cities, links);
-
+            if (ExecuteParallel)
+            {
+                SetupParallel(cities, links);
+            }
+            else
+            {
+                Setup(cities, links);
+            }
+            
             City source = FindCity( fromCity, cities );
             City target = FindCity(toCity, cities);
             if (D[source.Index, target.Index] == Double.MaxValue)
