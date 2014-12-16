@@ -26,6 +26,8 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
             get { return routes.Count; }
         }
 
+        public bool ExecuteParallel { set; get; }
+
         /// <summary>
         /// Initializes the Routes with the cities.
         /// </summary>
