@@ -12,7 +12,6 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
     public class RoutesDijkstra : Routes 
     {
         private static readonly TraceSource logger = new TraceSource("Fhnw.Ecnf.RoutePlanner.RoutePlannerLib.RoutesDijkstra");
-        public override event RouteRequestHandler RouteRequestEvent;
         /// <summary>
         /// Initializes the Routes with the cities.
         /// </summary>
@@ -32,10 +31,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
 
             var source = citiesBetween[0];
             var target = citiesBetween[citiesBetween.Count - 1];
-            if (RouteRequestEvent != null)
-            {
-                RouteRequestEvent(this, new RouteRequestEventArgs(source, target, mode));
-            }
+            NotifyObservers(source, target, mode);
             Dictionary<City, double> dist;
             Dictionary<City, City> previous;
             var q = FillListOfNodes(citiesBetween, out dist, out previous);

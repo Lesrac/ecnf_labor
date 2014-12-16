@@ -19,7 +19,7 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
         private static readonly TraceSource logger = new TraceSource("Fhnw.Ecnf.RoutePlanner.RoutePlannerLib.Routes");
         protected List<Link> routes = new List<Link>();
         private Cities cities;
-        public abstract event RouteRequestHandler RouteRequestEvent;
+        public event RouteRequestHandler RouteRequestEvent;
 
         public int Count
         {
@@ -103,5 +103,12 @@ namespace Fhnw.Ecnf.RoutePlanner.RoutePlannerLib
         protected abstract Link FindLink(City fromC, City toC, TransportModes mode);
 
         public abstract List<Link> FindShortestRouteBetween(string fromCity, string toCity, TransportModes mode);
+
+        protected void NotifyObservers(City fromCity,City toCity,TransportModes mode) {
+            if (RouteRequestEvent != null)
+            {
+                RouteRequestEvent(this, new RouteRequestEventArgs(fromCity, toCity, mode));
+            }
+        }
     }
 }
