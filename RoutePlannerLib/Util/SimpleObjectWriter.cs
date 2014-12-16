@@ -43,6 +43,9 @@
                 }
                 else if (propType == typeof(int))
                 {
+                    // ignore the index property
+                    if (pi.Name == "Index") continue;
+
                     writer.Write(pi.Name);
                     writer.Write("=");
                     writer.Write(pi.GetValue(o));
